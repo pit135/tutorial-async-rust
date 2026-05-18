@@ -7,9 +7,20 @@ Executor (melalui fungsi executor.run()) dirancang untuk terus mendengarkan dan 
 
 
 TUTORIAL 2
-1. ![Eksperimen 2.1 - server](images/2.1_server.png.png)
+1. ![Eksperimen 2.1 - server](images/2.1_server.png)
 ![Eksperimen 2.1 - client 1](images/2.1_client_1.png)
 ![Eksperimen 2.1 - client 2](images/2.1_client_2.png)
 ![Eksperimen 2.1 - client 3](images/2.1_client_3.png)
 Untuk menjalankan aplikasi ini, jalankan perintah cargo run --bin server di satu terminal, lalu buka tiga terminal baru dan jalankan cargo run --bin client di masing-masing terminal tersebut. Saat kita mengetik dan mengirim pesan dari salah satu klien, pesan itu akan dikirim ke server melalui jaringan WebSocket. Server kemudian bertindak sebagai pusat siaran (broadcaster) yang langsung meneruskan pesan tersebut ke semua klien lain yang sedang terhubung, sehingga obrolan muncul di layar semua orang secara real-time.
 
+2. ![Eksperimen 2.2 - server](images/2.2_server.png)
+![Eksperimen 2.2 - client 1](images/2.2_client_1.png)
+![Eksperimen 2.2 - client 2](images/2.2_client_2.png)
+![Eksperimen 2.2 - client 3](images/2.2_client_3.png)
+Pada Eksperimen 2.2, port WebSocket diubah dari 2000 menjadi 8080. Perubahan ini dilakukan pada dua file sekaligus, yaitu server.rs (lokasi server membuka jalur/mendengarkan) dan client.rs (lokasi klien memanggil koneksi). Kedua file ini harus diubah bersamaan karena komunikasi jaringan membutuhkan keselarasan alamat antara pengirim dan penerima. Jika server pindah membuka "pintu" di port 8080, maka klien juga wajib diarahkan ke pintu 8080 tersebut agar koneksi protokol ws:// bisa terhubung dengan sukses.
+
+3. ![Eksperimen 2.3 - server](images/2.3_server.png)
+![Eksperimen 2.3 - client 1](images/2.3_client_1.png)
+![Eksperimen 2.3 - client 2](images/2.3_client_2.png)
+![Eksperimen 2.3 - client 3](images/2.3_client_3.png)
+Pada Eksperimen 2.3, kita memodifikasi kode untuk menampilkan informasi IP dan Port pengirim pada setiap pesan karena aplikasi belum memiliki fitur username. Modifikasi ini cukup dilakukan di sisi server (server.rs). Alasannya, server adalah pihak pengelola jaringan yang mengetahui alamat koneksi (SocketAddr) dari setiap klien. Saat menerima pesan dari sebuah klien, server akan menggabungkan IP dan Port klien tersebut dengan isi pesannya, barulah kemudian pesan lengkap itu disiarkan (broadcast) ke seluruh klien lain yang terhubung.

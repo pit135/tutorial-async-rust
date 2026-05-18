@@ -28,11 +28,9 @@ async fn handle_connection(
                 if let Some(text) = msg.as_text() {
                     println!("From client {addr} {text:?}");
                     
-                    // Format Eksperimen 2.3: Tambahkan IP dan Port pengirim!
-                    let formatted_msg = format!("{}: {}", addr, text);
-                    
-                    // Siarkan pesan ke SEMUA klien lain yang terhubung
-                    let _ = bcast_tx.send(formatted_msg);
+                    // KODE ASLI 2.1 & 2.2: 
+                    // Langsung siarkan teks aslinya tanpa format tambahan IP/Port
+                    let _ = bcast_tx.send(text.to_string());
                 }
             }
             // PINTU 2: Mendengarkan pesan dari Klien LAIN yang disiarkan oleh Server
@@ -49,16 +47,15 @@ async fn handle_connection(
 async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     let (bcast_tx, _) = channel(16);
 
-    let listener = TcpListener::bind("127.0.0.1:2000").await?;
-    println!("listening on port 2000");
+    let listener = TcpListener::bind("127.0.0.1:8080").await?;
+    println!("listening on port 8080");
 
     loop {
         let (socket, addr) = listener.accept().await?;
         println!("New connection from {addr:?}");
         let bcast_tx = bcast_tx.clone();
+        
         tokio::spawn(async move {
-            // Kita menggunakan 'if let' sebagai ganti dari tanda '?'
-            // Jika koneksi websocket sukses (Ok), maka jalankan handle_connection
             if let Ok((_req, ws_stream)) = ServerBuilder::new().accept(socket).await {
                 let _ = handle_connection(addr, ws_stream, bcast_tx).await;
             } else {
