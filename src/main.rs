@@ -77,24 +77,12 @@ fn main() {
 
     // Tempat Anda memodifikasi kode untuk Eksperimen 1.1, 1.2, dan 1.3
     spawner.spawn(async {
-        println!("Petrus's Komputer: howdy!");
+        println!("Ade's Komputer: howdy!");
         TimerFuture::new(Duration::new(2, 0)).await;
-        println!("Petrus's Komputer: done!");
+        println!("Ade's Komputer: done!");
     });
 
-    spawner.spawn(async {
-        println!("Petrus's Komputer: howdy2!");
-        TimerFuture::new(Duration::new(2, 0)).await;
-        println!("Petrus's Komputer: done2!");
-    });
-
-    spawner.spawn(async {
-        println!("Petrus's Komputer: howdy3!");
-        TimerFuture::new(Duration::new(2, 0)).await;
-        println!("Petrus's Komputer: done3!");
-    });
-
-    // drop(spawner);
+    drop(spawner);
 
     executor.run();
 }
